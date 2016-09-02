@@ -1,0 +1,86 @@
+<html>
+<head>
+</head>
+<body>
+	<div data-role="page" id="mainPage">
+		<script>
+			$("#mainPage").live("pageshow",function(e){
+				$("#mainPage").appendTo("body").css("left","100%").animate({"left":"0"},200);
+				
+				
+				if(!window.mainInit){
+					window.mainInit=true;
+					
+					$("#mainFooter>div").addEventListener("quickClick",function(e){
+						$("#mainFooter>div").removeClass("jszx-bar-item-active");
+						$(e.currentTarget).addClass("jszx-bar-item-active");
+						
+						alert($(e.currentTarget).find(".jszx-bar-text").text());
+					});
+					
+					$("#mainWrapper")[0].style.height=$("#mainPage .page_content").height()+"px";
+					initScroll({
+						"wrapper":"mainWrapper",
+						"dir":"y",
+						"bounce":true
+					});
+					
+					var pics=["../resources/images/j1.jpg","../resources/images/j2.jpg"];
+					var markers=["../resources/images/d_gray.png","../resources/images/d_green.png"]
+					var dp=new DynamicPic({
+						"id": "dynamicPic1", //id，必须
+						"pics": pics, //图片URL的数组，必须
+						"markers": markers, //标识URL的数组，元素0为非当前图片标识，元素1为当前图片标识，默认URL为"images/d_gray.png"和"images/d_green.png"
+						"width": window.innerWidth, //默认为window.innerWidth
+						"height": window.innerWidth*3/8, //默认为window.innerWidth*9/16
+						"timer": "3000", //默认为5000
+						"onClick": function(index){
+							alert("这是第"+(index+1)+"张图片");
+						},
+						"onChange": function(index){
+							//alert("这是第"+(index+1)+"张图片");
+						}
+					});
+					
+				}
+				
+				var data=["爱冲印","爱游戏","爱音乐","189邮箱","天翼云卡","翼云","天翼终端","乐享3G","高速互联"];
+				for(var i=0;i<data.length;i++){
+					var html="<table width='100%'><tr>"
+							+	"<td width='15%'><img src='' style='height:2.5em;width:2.5em;'></td>"
+							+	"<td width='45%'><div style='font-family:黑体;color:#555;'>"+data[i]+"</div></td>"
+							+	"<td width='40%'><div style='font-size:0.85em;color:#888;'>2013.5.31 15:30</div></td>"
+							+"</tr></table>";
+					var $row=createListRow(html,"arrow-r");
+					$row.appendTo($("#mainList"));
+				}
+				
+				resetScrollBar("mainWrapper");
+			});
+			
+		</script>
+		
+		<div class="page_header">
+			<div class="page_header_title">天翼3G</div>
+			<img class="left_img" src="../resources/images/main_setting.png">
+			<div class="right_button">搜索</div>
+		</div>
+		
+		<div class="page_content">
+			<div class="jszx-wrapper" id="mainWrapper"><div class="jszx-scroller" id="mainScroller">
+				<div id="dynamicPic1"></div>
+				<div id="mainList"></div>
+			</div></div>
+		</div>
+		
+		<div class="page_footer">
+			<div class="jszx-bar-icon-up jszx-bar-item-4" id="mainFooter">
+				<div class="jszx-bar-item-active"><img src="../resources/images/icon1.png"><span class="jszx-bar-text">精品推荐</span><div class="jszx-bar-split"></div></div>
+				<div><img src="../resources/images/icon2.png"><span class="jszx-bar-text">应用分类</span><div class="jszx-bar-split"></div></div>
+				<div><img src="../resources/images/icon3.png"><span class="jszx-bar-text">数字企业</span><div class="jszx-bar-split"></div></div>
+				<div><img src="../resources/images/icon4.png"><span class="jszx-bar-text">搜索</span></div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

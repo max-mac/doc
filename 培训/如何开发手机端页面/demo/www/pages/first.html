@@ -1,0 +1,52 @@
+<html>
+<head>
+	<meta name="viewport" content="width=device-width"/>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	
+	<!-- 加载jQuery及jQuey mobile -->
+	<link rel="stylesheet" type="text/css" href="../resources/jquery_mobile_1.0b1/jquery.mobile-1.0b1.min.css" />
+	<script type="text/javascript" src="../resources/jquery-1.6.1.min.js"></script>
+	<script>
+		$(document).bind("mobileinit", function(){
+			$.mobile.defaultPageTransition="none";
+			$.mobile.loadingMessage=false;
+		});
+	</script>
+	<script type="text/javascript" src="../resources/jquery_mobile_1.0b1/jquery.mobile-1.0b1.min.js"></script>
+	
+	<!-- 加载框架 -->
+	<link rel="stylesheet" type="text/css" href="../resources/mobile-common.css" />
+	<script type="text/javascript" src="../resources/mobile-common.js"></script>
+	
+	<!-- 加载框架 -->
+	<script type="text/javascript" src="../resources/cordova-2.0.0.js"></script>
+	<script type="text/javascript" src="../resources/jsict_extend.js"></script>
+	
+	<link rel="stylesheet" type="text/css" href="../resources/dynamicPic.css" />
+	<script type="text/javascript" src="../resources/dynamicPic.js"></script>
+	
+	<link rel="stylesheet" type="text/css" href="../resources/grid.css" />
+	<script type="text/javascript" src="../resources/grid.js"></script>
+	
+	<script>
+		$("#firstPage").live("pageshow",function(){
+			document.addEventListener("deviceready",onDeviceReady,false);
+			$.mobile.changePage("main.html");//通常这条语句放在onDeviceReady中或者之后执行的函数中，而不是此处，因为需要等待初始化工作完成后再跳转
+		});
+		
+		function onDeviceReady(){
+			
+		}
+	</script>
+	<style>
+		.ui-mobile [data-role=page], .ui-mobile [data-role=dialog], .ui-page{display:block;};
+		.ui-mobile .ui-page-active{}
+	</style>
+</head>
+<body>
+	<div data-role="page" id="firstPage">
+		<img src="../resources/images/loading.jpg" style="position:absolute;width:100%;height:100%;">
+		<img src="../resources/images/loading2.gif" style="position:absolute;width:10%;left:45%;top:15%;">
+	</div>
+</body>
+</html>

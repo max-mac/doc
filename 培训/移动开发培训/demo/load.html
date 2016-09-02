@@ -1,0 +1,298 @@
+<html>
+<head>
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width" />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<meta name="format-detection" content="telephone=no" />
+	
+	<!-- 加载jQuery及jQuey mobile -->
+	<link rel="stylesheet" type="text/css" href="../../resources/jquery.mobile.min.css" />
+	<script type="text/javascript" src="../../resources/jquery.min.js"></script>
+	<script>
+		$(document).bind("mobileinit", function(){
+			$.mobile.defaultPageTransition="none";
+			$.mobile.page.prototype.options.domCache = true;
+		});
+		$.fn.live=function(event,handler){
+			$(document).on(event,this.selector,handler);
+		}
+	</script>
+	<script type="text/javascript" src="../../resources/jquery.mobile.min.js"></script>
+	
+	<!-- 加载框架 -->
+	<link rel="stylesheet" type="text/css" href="../../resources/mobile-common.css" />
+	<script type="text/javascript" src="../../resources/mobile-common.js"></script>
+	
+	<link rel="stylesheet" type="text/css" href="../../resources/jqmDateBox.css" />
+	<script type="text/javascript" src="../../resources/jqmDateBox.js"></script>
+	
+	<script type="text/javascript" src="../../resources/moment.js"></script>
+	
+	<link rel="stylesheet" type="text/css" href="../../resources/grid.css" />
+	<script type="text/javascript" src="../../resources/grid.js"></script>
+	
+	<link rel="stylesheet" type="text/css" href="../../resources/app.css" />
+	<script type="text/javascript" src="../../resources/app.js"></script>
+	
+	<script type="text/javascript" src="../../resources/des/tripledes.js"></script>
+	<script type="text/javascript" src="../../resources/des/mode-ecb.js"></script>
+	<script type="text/javascript" src="../../resources/des/md5.js"></script>
+	<script type="text/javascript" src="../../resources/des/des.js"></script>
+	
+	<script type="text/javascript" src="../../resources/cordova/cordova.js"></script>
+	
+	<script type="text/javascript" src="../../resources/file.js"></script>
+		
+	<script>
+		$("#loadPage").live("pageshow",function(){
+			document.addEventListener("deviceready",onDeviceReady,false);
+			document.addEventListener("backbutton",onBackButton,false);
+			document.addEventListener("resume",onResume,false);
+			
+			//用于远程更新客户端代码
+			$("<script src='"+window.serverUrl+"update.js'>").appendTo("head");
+		});
+		
+		function onDeviceReady(){
+			navigator.splashscreen.hide();
+
+			$.ajax({
+				url:window.serverUrl + 'version/checkUpdate.action',
+				type:'post',
+				data:{
+					'versionNumber':device.appVersion,
+					'versionPlatform':platform
+				},
+				success:function(data){
+					var datas = eval("("+data+")");
+					if(datas.result===true){
+						
+						if(device.platform=="Android"){
+							showConfirm("<div>您有新版本了，需要下载更新吗？</div>","新版本","确定",sureUpdate,"取消",cancelUpdate);
+						}else{
+							showConfirm("<div>您有新版本了，需要更新吗？</div>","新版本","确定",function(){
+								window.open("https://appsto.re/cn/3pxH9.i","_system");
+							},"取消",function(){
+								verifyLogin();
+							});
+						}
+					}else{
+						verifyLogin();
+					}
+				}
+			});
+			
+			/*
+			jsict.jpush.init(
+				function(res){},
+				function(err){},
+				"com.jsict.wxds", //监听消息的包名，与申请JPUSH帐号中的要一致
+				"com.jsict.wxds", //应用的包名
+				"com.jsict.jsictplatform.client.MainActivity" //应用启动Activity的类名
+			); */
+		}
+		
+		function sureUpdate(){
+			$.ajax({
+				url:window.serverUrl + 'version/getLatestVersionUrl.action',
+				type:'post',
+				data:{
+					'versionPlatform':'1'
+				},
+				success:function(data){
+					var datas = eval(data);
+					var fileTransfer = new FileTransfer();
+					uri=encodeURI(window.serverUrl+datas.result.substring(1,datas.result.length));
+					showLoading("正在下载....");
+					fileTransfer.download(
+					    uri,
+					    window.appRootPath+"/WXDS.apk",
+					    function(entry) {
+					    	toast("下载成功！");
+					    	//安装程序包
+							jsict.appManager.installApp(function(){}, function(){}, window.appRootPath+"/WXDS.apk");
+					    },
+					    function(error) {
+					    	toast("下载失败！");
+					    }
+					);
+				}
+			});
+		}
+		
+		function cancelUpdate(){
+			verifyLogin();
+		}
+		
+		function verifyLogin(){
+			var flag1 = true;
+			var flag2 = true;
+			var flag3 = true;
+			if(window.localStorage.getItem("sjhm")==null||window.localStorage.getItem("sjhm")=="null"){
+				flag1 = false;
+			}
+			if(window.localStorage.getItem("pwd")==null||window.localStorage.getItem("pwd")=="null"){
+				flag2 = false;
+			}
+			if(window.localStorage.getItem("swglm")==null||window.localStorage.getItem("swglm")=="null"){
+				flag3 = false
+			}
+			if(flag1&&flag2&&flag3){
+				showLoading("正在登陆...");
+				setTimeout(function(){
+					$.ajax({
+						url:window.serverUrl+'mobile/global/verifyLogin.action',
+						type:'post',
+						data:{
+							'sjhm':window.localStorage.getItem("sjhm"),
+							'pwd':window.localStorage.getItem("pwd"),
+							'swglm':window.localStorage.getItem("swglm"),
+							'loginType':"1"
+						},
+						success:function(data){
+							hideLoading();
+							var datas = eval("("+data+")");
+							if(datas.code=="0"){
+								window.swglm = datas.swglm;
+								window.nsrmc = datas.deptName;
+								window.userName = datas.displayName;
+								window.userId = datas.userId;
+								window.nc = datas.nc;
+								window.txlj = datas.txlj;
+								window.areaCode = datas.areaCode;
+								window.mobile = datas.mobile;
+								window.qydbInfo = datas.qydb;
+								var yhlx=window.localStorage.getItem("yhlx");
+								var isDqy=window.localStorage.getItem("isDqy");
+								var isJz=window.localStorage.getItem("isJz");
+								var isZy=window.localStorage.getItem("isZy");
+								//权限控制
+								if(isDqy=="true"){
+									if(yhlx==1){
+										if(isJz=="true"){
+											window.userRole="DQY1";
+										}else{
+											window.userRole="DQY1_";//未分配局长
+										}
+										
+									}else if(yhlx==2){
+										if(isZy=="true"){
+											window.userRole="DQY2";
+										}else{
+											window.userRole="DQY2_";//未分配专员
+										}
+										
+									}else if(yhlx==4){
+										window.userRole="DQY3";
+									}
+								}else if(isDqy=="false"){
+									if(yhlx==1){
+										window.userRole="QY1";
+									}else if(yhlx==2){
+										window.userRole="QY2";
+									}else if(yhlx==4){
+										window.userRole="QY3";
+									}
+								}
+								
+								$.ajax({
+									url:window.serverUrl+"mobile/global/isFirstLogin.action",
+									data:{
+										'sjhm':window.localStorage.getItem("sjhm"),
+										'swglm':window.localStorage.getItem("swglm")
+									},
+									success:function(data){
+										data = eval("("+data+")");
+										if(data.code=="1"){
+											//首次登陆
+											showConfirm("系统检测到您首次登陆，要求您设置密码！","密码设置","确定",sureModify,"取消",cancelModify);
+										}
+										else{
+											//非首次登陆
+											loginRecord(window.mobile,window.swglm,window.userId,device.model,device.version,device.platform,device.carrierType);
+											getUnreadAllNum();
+											if(window.localStorage.getItem(window.userId+"picPwdFun")=="true"){
+												$.mobile.changePage("../my/pwd.html");
+											}else{
+												$.mobile.changePage("main.html");
+											}
+											
+										}
+									}
+								});
+								/* var option = {
+									"alias" : window.userId,
+									"tags" : []
+								};
+								jsict.jpush.setAliasAndTags(function(res){},function(err){},option); */
+								//getUnreadAllNum();
+								/* $.mobile.changePage("main.html"); */
+							}
+							else{
+								$.mobile.changePage("login.html");
+							}
+						}
+					});
+				},1500);
+			}
+			else{
+				setTimeout(function(){
+					$.mobile.changePage("login.html");
+				},1500);
+			}
+		}
+		function onBackButton(){
+			var $page=$(".ui-page-active");
+			var id=$page.attr("id");
+			
+			if($page.attr("tab")||id=="dsLoginPage"||id=="loadPage"){
+				if(window.exitFlag){
+					navigator.app.exitApp();
+					return;
+				}
+				window.exitFlag=true;
+				toast("再按一次，退出应用！",2000,function(){
+					window.exitFlag=false;
+				})
+				return;
+			}
+			
+			if($$(".max-dialog").length!=0){
+				$$(".max-dialog").remove();
+				return;
+			}
+			
+			if(id=="subjectEditPage"){
+				cancelSubjectEdit();
+			}
+			else if(id=="zxxxSpDetailPage"){
+				zxxxBack();
+			}
+			else if(id=="kcxxDetailPage"){
+				//删除window.kcxxArray中的最后一个数据
+				deleteNewestData();
+			}else if(id=="pwdPage"){
+				
+			}
+			else{
+				window.history.back();
+			}
+		}
+		function onResume(){
+			if(window.localStorage.getItem(window.userId+"picPwdFun")=="true"){
+				window.isResume=true;
+				$.mobile.changePage("../my/pwd.html");
+			}
+		}
+	</script>
+	<style>
+
+	</style>
+</head>
+<body>
+	<div data-role="page" id="loadPage">
+		<div class="page_content">
+			<img src="../../resources/images/bg.jpg" style="position:absolute;width:100%;height:100%;">
+		</div>
+	</div>
+</body>
+</html>

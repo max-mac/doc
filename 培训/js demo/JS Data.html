@@ -1,0 +1,72 @@
+<html>
+	<head>
+		<script src="jquery.js"></script>
+		<script>
+			$(function(){
+				
+				//初始化
+				$("#content1").show();
+				
+				
+				//为tabs添加事件
+				$("#tab1").click(function(){
+					$("#content1").show();
+					$("#content2").hide();
+					$("#content3").hide();
+					$("#content4").hide();
+				});
+				$("#tab2").click(function(){
+					$("#content1").hide();
+					$("#content2").show();
+					$("#content3").hide();
+					$("#content4").hide();
+				});
+				$("#tab3").click(function(){
+					$("#content1").hide();
+					$("#content2").hide();
+					$("#content3").show();
+					$("#content4").hide();
+				});
+				$("#tab4").click(function(){
+					$("#content1").hide();
+					$("#content2").hide();
+					$("#content3").hide();
+					$("#content4").show();
+				});
+				
+			});
+		</script>
+		<style>
+			.tabs>div{
+				float:left;
+				width:25%;
+				-webkit-box-shadow:0 0 1px 1px #ccc;
+				text-align:center;
+				cursor:pointer;
+				padding:5px 0;
+			}
+			.contents>div{
+				padding:3em;
+				display:none;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="tabs">
+			<div id="tab1">标题1</div>
+			<div id="tab2">标题2</div>
+			<div id="tab3">标题3</div>
+			<div id="tab4">标题4</div>
+		</div>
+		
+		<div class="contents">
+			<div id="content1">正文111111111</div>
+			<div id="content2">正文222222222</div>
+			<div id="content3">正文333333333</div>
+			<div id="content4">正文444444444</div>
+		</div>
+		
+		
+	</body>
+</html>

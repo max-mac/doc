@@ -1,0 +1,49 @@
+				$(".tabs>div").click(function(e){
+					if(e.currentTarget.id=="tab1"){
+						$("#content1").show();
+						$("#content2").hide();
+						$("#content3").hide();
+						$("#content4").hide();
+					}
+					if(e.currentTarget.id=="tab2"){
+						$("#content1").hide();
+						$("#content2").show();
+						$("#content3").hide();
+						$("#content4").hide();
+					}
+					if(e.currentTarget.id=="tab3"){
+						$("#content1").hide();
+						$("#content2").hide();
+						$("#content3").show();
+						$("#content4").hide();
+					}
+					if(e.currentTarget.id=="tab4"){
+						$("#content1").hide();
+						$("#content2").hide();
+						$("#content3").hide();
+						$("#content4").show();
+					}
+				});
+--------------------------------------------------------------------------------------------				
+				$(".tabs>div").click(function(e){
+					var tabId=e.currentTarget.id;
+					var contentId=tabId.replace("tab","content");
+					
+					$(".contents>div").hide();
+					$("#"+contentId).show();
+				});
+--------------------------------------------------------------------------------------------
+				$(".tabs>div").click(function(e){
+					var index=$(e.currentTarget).prevAll().length;
+					$(".contents>div").hide();
+					$(".contents>div").eq(index).show();
+					
+					$("img").attr("src",$(e.currentTarget).attr("url"));
+				});
+--------------------------------------------------------------------------------------------
+<img width="100%" src="267f9e2f07082838a304b21dba99a9014c08f1aa.jpg">
+
+			<div id="tab1" url="267f9e2f07082838a304b21dba99a9014c08f1aa.jpg">标题1</div>
+			<div id="tab2" url="b58f8c5494eef01f021a76cce2fe9925bc317da8.jpg">标题2</div>
+			<div id="tab3" url="cb8065380cd791239aeffa7daf345982b2b780af.jpg">标题3</div>
+			<div id="tab4" url="83025aafa40f4bfb6edef05d014f78f0f73618a8.jpg">标题4</div>
