@@ -4,29 +4,23 @@
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	
 	<!-- 加载jQuery及jQuey mobile -->
-	<link rel="stylesheet" type="text/css" href="../resources/jquery_mobile_1.0b1/jquery.mobile-1.0b1.min.css" />
-	<script type="text/javascript" src="../resources/jquery-1.6.1.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../resources/jquery.mobile.min.css" />
+	<script src="../resources/jquery.min.js"></script>
 	<script>
 		$(document).bind("mobileinit", function(){
 			$.mobile.defaultPageTransition="none";
-			$.mobile.loadingMessage=false;
+			$.mobile.page.prototype.options.domCache = true;
 		});
 	</script>
-	<script type="text/javascript" src="../resources/jquery_mobile_1.0b1/jquery.mobile-1.0b1.min.js"></script>
+	<script type="text/javascript" src="../resources/jquery.mobile.min.js"></script>
 	
 	<!-- 加载框架 -->
 	<link rel="stylesheet" type="text/css" href="../resources/mobile-common.css" />
 	<script type="text/javascript" src="../resources/mobile-common.js"></script>
-	
-	<!-- 加载框架 -->
-	<script type="text/javascript" src="../resources/cordova-2.0.0.js"></script>
-	<script type="text/javascript" src="../resources/jsict_extend.js"></script>
-	
+
 	<link rel="stylesheet" type="text/css" href="../resources/dynamicPic.css" />
 	<script type="text/javascript" src="../resources/dynamicPic.js"></script>
-	
-	<link rel="stylesheet" type="text/css" href="../resources/grid.css" />
-	<script type="text/javascript" src="../resources/grid.js"></script>
+
 	
 	<script>
 		$("#firstPage").live("pageshow",function(){

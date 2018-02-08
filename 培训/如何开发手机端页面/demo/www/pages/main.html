@@ -1,12 +1,30 @@
 <html>
 <head>
+	<meta name="viewport" content="width=device-width"/>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	
+	<!-- 加载jQuery及jQuey mobile -->
+	<link rel="stylesheet" type="text/css" href="../resources/jquery.mobile.min.css" />
+	<script src="../resources/jquery.min.js"></script>
+	<script>
+		$(document).bind("mobileinit", function(){
+			$.mobile.defaultPageTransition="none";
+			$.mobile.page.prototype.options.domCache = true;
+		});
+	</script>
+	<script type="text/javascript" src="../resources/jquery.mobile.min.js"></script>
+	
+	<!-- 加载框架 -->
+	<link rel="stylesheet" type="text/css" href="../resources/mobile-common.css" />
+	<script type="text/javascript" src="../resources/mobile-common.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="../resources/dynamicPic.css" />
+	<script type="text/javascript" src="../resources/dynamicPic.js"></script>
 </head>
 <body>
 	<div data-role="page" id="mainPage">
 		<script>
 			$("#mainPage").live("pageshow",function(e){
-				$("#mainPage").appendTo("body").css("left","100%").animate({"left":"0"},200);
-				
 				
 				if(!window.mainInit){
 					window.mainInit=true;
